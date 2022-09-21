@@ -1,0 +1,30 @@
+<%- include ('partials/header.ejs')%>
+<body>
+
+    <%- include ('partials/navbar.ejs') %>
+    <form action="/api/users/login" method="POST">
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                <label for="user">Username:</label>
+                <input type="text" id="userName" name="userName"
+                class="form-control" placeholder="Username"><br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"
+                class="form-control" placeholder="Password"><br>
+                </div>
+    
+            </div>
+        
+        <input type="submit" value="Login" id="login" class="btn btn-dark">
+        <input type="button" onclick="location.href='/signup'" value="Sign up" id="signUp" 
+                class="btn btn-dark justify-content-end">
+        </div>
+    </form>
+    <p id="ola"></p>
+
+    
+</body>
+<%- include ('partials/footer.ejs') %>
+

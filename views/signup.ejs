@@ -1,0 +1,37 @@
+<%- include ('partials/header.ejs')%>
+<body>
+
+<%- include ('partials/navbar.ejs') %>
+<form class="formulario" action="/api/users/signup" method="POST">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+
+                <input type="text" id="firstName" name="firstName" 
+                class="form-control" placeholder="First name">
+
+                <input type="text" id="lastName" name="lastName"
+                class="form-control" placeholder="Last name">
+
+                <input type="email" id="email" name="email"
+                class="form-control" placeholder="E-mail">
+
+                <input type="text" id="userName" name="userName"
+                class="form-control" placeholder="Username">
+
+                <input type="password" id="password" name="password"
+                class="form-control" placeholder="Password">
+
+                <input type="password" id="passwordCheck" name="passwordCheck"
+                class="form-control" placeholder="confirm password">
+
+            </div>
+        </div>
+    </div>
+    <div class="container btns">
+        <input type="submit" value="Sign Up" id="signup" class="btn btn-dark">
+        <input type="button" onclick="location.href='/'" value="Return" id="Return" class="btn btn-dark">
+    </div>
+</form> 
+</body>
+<%- include ('partials/footer.ejs') %>

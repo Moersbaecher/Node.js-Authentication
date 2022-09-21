@@ -1,0 +1,11 @@
+.btns {
+    padding-top: 5vh;
+}
+
+.formulario {
+    padding-top: 8vh;
+}
+
+.formulario, input {
+    margin-top: 2vh;
+}
