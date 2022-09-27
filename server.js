@@ -15,7 +15,7 @@ const app = express();
 
 //middleware
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -35,6 +35,10 @@ app.get('/signup', (req, res) => {
 
 app.get('/home', (req, res) => {
     res.render('home')
+});
+
+app.get('/verif', (req, res) => {
+    res.render('verif')
 });
     
 //API routes

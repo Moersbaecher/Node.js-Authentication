@@ -2,9 +2,20 @@
 const bcrypt = require("bcrypt");
 const db = require("../Models");
 const jwt = require("jsonwebtoken");
-const sendMail = require('../Middlewares/mail.js')
+const nodemailer = require("nodemailer");
 
 const User = db.users;
+
+function idCheck() {
+    User.update( 
+        {
+            status: "Active",
+        },
+        {
+            where:{ id : User.userId },
+        }
+    );
+}
 
 const signup = async( req, res) => {
     try {
@@ -27,9 +38,46 @@ const signup = async( req, res) => {
                 res.cookie("jwt", token, { maxAge: 1 * 24 * 60 *60, httpOnly: true});
                 console.log("user", JSON.stringify(user, null, 2));
                 console.log(token);
-                console.log(sendMail());
+//************************************************************************************************************************************************* */
+const tokenMail = jwt.sign(
+    {
+    data: 'Token Data'},
+    'ourSecretKey', { expiresIn: '60m' }  
+);
 
-                return res.status(201).render('home');
+
+                const sendEmail = async () => {
+                try {
+                const transporter = nodemailer.createTransport({
+                    host: "smtp.mailtrap.io",
+                    port: 2525,
+                    auth: {
+                    user: "adce9ef8b7b1e5",
+                    pass: "49a4b0382b83d0"
+                    },
+                });
+
+                await transporter.sendMail({
+                    from: process.env.USER,
+                    to: email,
+                    subject: "Confirm your registration",
+                    text: `Please ${firstName} click on the link to validate your registration,
+
+                    http://localhost:3000/api/users/verify/${tokenMail}
+
+                    Thanks`
+                });
+                console.log("email sent sucessfully");
+                } catch (error) {
+                console.log("email not sent");
+                console.log(error);
+                } 
+                };
+
+                sendEmail();
+//************************************************************************************************************************************************* */             
+
+                return res.status(201).render('verif');
             } else {
                 return res.status(409).send("Information incorrect")
             }
@@ -38,6 +86,32 @@ const signup = async( req, res) => {
     }
 };
 
+//=====================================================================================
+    
+
+    const emailVerif = async (req, res)=>{
+    const {token} = req.params;
+    
+    // Verifing the JWT token 
+    jwt.verify(token, 'ourSecretKey', function(err, decoded) {
+        if (err) {
+            console.log(err);
+            res.send(`Email verification failed, 
+                    possibly the link is invalid or expired`);
+        }
+        else {
+
+            idCheck()
+            
+            res.send("Email verifified successfully");
+        }
+    });
+}
+
+
+
+
+//=====================================================================================
 
 
 //authentication
@@ -50,7 +124,7 @@ const login = async (req, res) => {
                 userName: req.body.userName
             }
             });
-
+    if(user.status != null) {
         if(user) {
             const isSame = await bcrypt.compare(password, user.password);
 
@@ -67,8 +141,8 @@ const login = async (req, res) => {
             } else {
                 return res.status(401).send("Authentication failed");
             }
-        } else {
-            return res.status(401).send("Authentication failed");
+        } }else {
+            return res.status(401).send("Email authentication failed");
     }
 } catch (error) {
     console.log(error)
@@ -77,5 +151,6 @@ const login = async (req, res) => {
 
 module.exports = {
     signup,
-    login
+    login,
+    emailVerif
 };
