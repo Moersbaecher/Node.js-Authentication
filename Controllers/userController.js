@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 
 const User = db.users;
 
-function idCheck() {
+/* function idCheck() {
     User.update( 
         {
             status: "Active",
@@ -15,7 +15,7 @@ function idCheck() {
             where:{ id : User.userId },
         }
     );
-}
+} */
 
 const signup = async( req, res) => {
     try {
@@ -101,7 +101,15 @@ const tokenMail = jwt.sign(
         }
         else {
 
-            idCheck()
+            //idCheck()
+            User.update( 
+                {
+                    status: "Active",
+                },
+                {
+                    where:{ id : 1 },
+                }
+            );
             
             res.send("Email verifified successfully");
         }
