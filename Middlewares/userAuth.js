@@ -2,7 +2,6 @@
 const express = require("express");
 const db = require("../Models");
 const dotenv = require('dotenv').config();
-const nodemailer = require("nodemailer");
 //Assigning db.users to User variable
  const User = db.users;
 

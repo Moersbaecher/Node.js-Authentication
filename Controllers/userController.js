@@ -6,16 +6,7 @@ const nodemailer = require("nodemailer");
 
 const User = db.users;
 
-/* function idCheck() {
-    User.update( 
-        {
-            status: "Active",
-        },
-        {
-            where:{ id : User.userId },
-        }
-    );
-} */
+
 
 const signup = async( req, res) => {
     try {
@@ -39,11 +30,10 @@ const signup = async( req, res) => {
                 console.log("user", JSON.stringify(user, null, 2));
                 console.log(token);
 //************************************************************************************************************************************************* */
-const tokenMail = jwt.sign(
-    {
-    data: 'Token Data'},
+/* const tokenMail = jwt.sign(
+    {id: user.id},
     'ourSecretKey', { expiresIn: '60m' }  
-);
+); */
 
 
                 const sendEmail = async () => {
@@ -63,7 +53,7 @@ const tokenMail = jwt.sign(
                     subject: "Confirm your registration",
                     text: `Please ${firstName} click on the link to validate your registration,
 
-                    http://localhost:3000/api/users/verify/${tokenMail}
+                    http://localhost:3000/api/users/verify/${token}
 
                     Thanks`
                 });
@@ -93,21 +83,18 @@ const tokenMail = jwt.sign(
     const {token} = req.params;
     
     // Verifing the JWT token 
-    jwt.verify(token, 'ourSecretKey', function(err, decoded) {
+    jwt.verify(token, 'process.env.secretKey', function(err, decoded) {
         if (err) {
             console.log(err);
             res.send(`Email verification failed, 
                     possibly the link is invalid or expired`);
         }
-        else {
-
-            //idCheck()
-            User.update( 
+        else {User.update( 
                 {
                     status: "Active",
                 },
                 {
-                    where:{ id : 1 },
+                    where:{ id : decoded.id },
                 }
             );
             
